@@ -1,0 +1,35 @@
+<% locals.title = "Archives" %>
+<% include ../layouts/_header %>
+<%
+    var coverImage = "/images/header.jpg";
+%>
+<div class="blog-cover" style="position:relative; background-image: url(<%=coverImage%>);background-size: cover;background-position: center;">
+    <div class="xp-cover-gradient"></div>
+    <header class="xp-cover xp-antialiased">
+        <h1 class="post-title">Blog Archives</h1>
+        <div class="xp-cover-arrow">v</div>
+    </header>
+</div>
+<script>
+    var posts = [
+        <%
+            posts.forEach(function(post){
+            var postClone = JSON.parse(JSON.stringify( post ));
+                delete postClone.content;
+
+        %>
+        <%- JSON.stringify( postClone ) %>
+        <% }) %>
+    ]
+
+</script>
+
+<main class="site-content post" role="main">
+
+
+		<% posts.forEach(function(post){ %>
+		  <% include ../layouts/_archives %>
+		<% }) %>
+
+</main>
+<% include ../layouts/_footer %>

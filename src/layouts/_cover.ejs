@@ -1,0 +1,15 @@
+<%
+var coverImage = post.image || "/images/header.jpg";
+%>
+<div class="blog-cover" style="position:relative; background-image: url(<%=coverImage%>);background-size: cover;background-position: center;">
+    <div class="xp-cover-gradient"></div>
+    <header class="xp-post-info">
+        <span href="<%= data.baseUrl %><%= post.url %>">@xperiments <time datetime="<%= post.date %>"><%= post.date.toLocaleDateString().split(',').slice(1).join(',') %></time>.</span><br/>
+    </header>
+    <header class="xp-cover xp-antialiased">
+        <h1 class="post-title"><%= post.title %></h1>
+        <%if (post.description) { %><h3><%= post.description %></h3> <% } %>
+		<%if (post.categories) { %><h4><svg style="width:22px; height:22px; fill:#FFF; margin-bottom:-6px;" viewBox="0 0 32 32"><use xlink:href="#tag"></use></svg> <%= post.categories %></h4> <% } %>
+		<div class="xp-cover-arrow">v</div>
+    </header>
+</div>

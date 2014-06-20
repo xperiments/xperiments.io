@@ -1,0 +1,24 @@
+<% locals.title = "xperiments.io" %>
+<% include ../layouts/_header %>
+<% posts.forEach(function(post){ %>
+  <% include ../layouts/_post %>
+<% }) %>
+
+<nav class="pagination" role="pagination">
+    <span class="page-number">Page <%=currentIndex+1%> of <%=pages.length%></span>
+
+    <nav class="page-nav cf">
+
+          <% for (var i = 0; i < pages.length; i++) { %>
+            <% var page = pages[i] %>
+            <% if (i === currentIndex - 1) { %>
+              <a href="<%= data.baseUrl %><%= page.url %>" class="newer-posts"> Newer &#8594;</a>
+
+            <% } else if (i === currentIndex + 1) { %>
+              <a href="<%= data.baseUrl %><%= page.url %>" class="older-posts"> &#8592; Older</a>
+            <% } %>
+          <% } %>
+    </nav>
+</nav>
+<% include ../layouts/_footer %>
+

@@ -1,0 +1,32 @@
+{
+    <%if (post.image) { %>
+    image:<%=post.image%>,
+    <%}%>,
+}
+
+
+<main class="site-content" role="main">
+
+    <article class="post tag-text tag-formatting">
+
+
+        <section class="author-card cf">
+            <%if (post.image) { %>
+            <div class="author-image">
+                <img src="<%=post.image%>" alt="Pedro Casaubon">
+            </div>
+            <% } %>
+
+            <div class="author-text" style="width: 65%; float: left;">
+                <span><time datetime="<%= post.date %>"><%= post.date.toLocaleDateString().split(',').slice(1).join(',') %></time></span><br/>
+                <span class="author-name"><a href="<%= data.baseUrl %><%= post.url %>"><%= post.title %></a></span>
+                <%if (post.description) { %>
+
+                <p class="xp-post-archive-desc"><%= post.description %></p>
+
+                <% } %>
+            </div>
+        </section>
+    </article>
+
+</main>

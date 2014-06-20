@@ -1,0 +1,16 @@
+
+
+
+
+
+        <section class="author-card cf">
+            <div class="author-text" style="float: left;">
+                <span><time datetime="<%= post.date %>"><%= post.date.toLocaleDateString().split(',').slice(1).join(',') %></time></span><br/>
+                <span class="author-name"><a href="<%= data.baseUrl %><%= post.url %>"><%= post.title %></a></span>
+                <%if (post.description) { %>
+
+                <p class="xp-post-archive-desc"><%= post.description %></p>
+
+                <% } %>
+            </div>
+        </section>

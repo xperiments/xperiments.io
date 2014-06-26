@@ -2,14 +2,14 @@
     "title": "Serailizing Typescript Objects",
     "date": "2014-6-24"
 }
-I will write a series of posts about **Serializing** and **Deserializing** Typescript class instances.
+typescript-serializer
+=====================
 
-Typescript does not provide a native way of Serializing Objects/Classes so I have developed a proof of concept mechanism to allow it. You can download it at:
-
+Typescript does not provide a native way of Serializing Objects/Classes so I have developed a mechanism to allow it.
 [GitHub: typescript-serializer](https://github.com/xperiments/typescript-serializer)
 
 
-## Defining Serializable Classes
+## Serializable Classes
 
 Imagine a User Class like this:
 
@@ -25,14 +25,19 @@ class User
 
 And we want to serialize only the *name*, *street* and *number* properties of the object.
 
-To do this we need to make User class extend Serializable and **annotate** it **adding** a property named **"@serializable"**.
 
-Extending the class as Serializable will add 2 main methods to our class:
+### Initializing Serializable Classes
+
+To do this we need to make User class extend **Serializable** and **annotate** it adding a property named **"@serializable"**.
+
+Extending the class as Serializable will add 4 new methods to our class:
 
 * writeObject();
-* readObject(obj:any);
+* readObject(obj:ISerializableObject);
+* stringify();
+* parse(jsonstring);
 
-We will see the usage of these methods later, for now our User class will be like this:
+We will see the usage of these methods later, for now our User class will change to this:
 
 ```javascript
 class User extends extends Serializable
@@ -45,25 +50,33 @@ class User extends extends Serializable
 }
 ```
 
-Define & register what properties we like to export using another helper Class:
+### Defining Serializable properties
+
+Now that we have our User class **Annotated** as serializable, we need to provide info about what properties must be serialized.
+To acomplain this, create a new class named UserSerializer that implements ISerializerDefinition and define which properties from User to serialize, by declaring it as a properties of the new Class.
+
+> It's important **REMEMBER** to initialize all props to null, if not it won't work :-(
 
 ```javascript
-class UserSerializer
+class UserSerializer implements ISerializerDefinition
 {
+	"@serializer":string = null;
     name:string = null; // we need to init to null to this work
     street:string = null;
     number:number = null;
 }
 ```
-**REMEMBER** to initialize all props to null, if not it won't work :-(
 
+### Registering Serializable Classes
 
-Register it in the main Serializer using the Serializer.registerClass method.
+Is time to Register our Serializble class with our ISerializerDefinition using the static registerClassMethod.
+
+	Serializer.registerClass( classContext:()=>any, SerializerDataClass:typeof SerializerDefinition ):void
 
 It takes 2 arguments:
 
 * **classContext** // a funciton that returns the Main class to Serialize
-* **SerializerDataClass:any** // The serializer Class that defines what elements to serialize
+* **SerializerDataClass:any** // The SerializableData Class that defines how & what elements to serialize.
 
 
 ```javascript
@@ -151,3 +164,5 @@ class UserAddressSerializer extends extends Serializable
 Serializer.registerClass( ()=>UserAddress, UserAddressSerializer );
 
 ```
+
+Pedro

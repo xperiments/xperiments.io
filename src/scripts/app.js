@@ -193,9 +193,45 @@ Array.prototype.slice.call( document.querySelectorAll('[xp-frame]') ).map( funct
 
 });
 
+if ( (!('innerText' in document.createElement('a'))) && ('getSelection' in window) ) {
+	HTMLElement.prototype.__defineGetter__("innerText", function() {
+		var selection = window.getSelection(),
+			ranges = [],
+			str;
+
+		// Save existing selections.
+		for (var i = 0; i < selection.rangeCount; i++) {
+			ranges[i] = selection.getRangeAt(i);
+		}
+
+		// Deselect everything.
+		selection.removeAllRanges();
+
+		// Select `el` and all child nodes.
+		// 'this' is the element .innerText got called on
+		selection.selectAllChildren(this);
+
+		// Get the string representation of the selected nodes.
+		str = selection.toString();
+
+		// Deselect everything. Again.
+		selection.removeAllRanges();
+
+		// Restore all formerly existing selections.
+		for (var i = 0; i < ranges.length; i++) {
+			selection.addRange(ranges[i]);
+		}
+
+		// Oh look, this is what we wanted.
+		// String representation of the element, close to as rendered.
+		return str;
+	})
+}
+
+
 Array.prototype.slice.call( document.querySelectorAll('[xp-code-play]') ).map( function( el ){
 
-	var code = el.getElementsByTagName('pre')[0].outerText;
+	var code = el.getElementsByTagName('pre')[0].textContent;
 	while (el.lastChild) { el.removeChild(el.lastChild); }
 	var img = document.createElement('img');
 	img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAMAAACVQ462AAAApVBMVEUAAAAAbMkDbsoAbMkAbMkAbMkAbMlspswAbMkAbMkAbMkAbMkAbMkAbMkAbMkKdctmo8xupsxNmsxhocxupszv7/EAa8kAbsnx8PKiyeX/9/T89fNspcz/+fVGl8ymy+ZMmcxLn9gEfM2pzeav0Of38/MgitExkdT//vZTo9kAdcvU4u0AY8VvsN7o6/C20+mXxONnrNzB2Opcn8xhqdsAbckAa8iBj7aKAAAAIXRSTlMAYG8wQBAgpMV/n+uP2LJOnFiRIKb///////////////W5ppeZAAABg0lEQVRIx+2U2W6DMBBFzVr2dANjKHVjsy8hSUv+/9NqlvQBQ5o+tFKlHCF7LKGj8RUMuDFBSshTks3VgjKL0RzawMeHqwVFHszJqff6crVgG7lzAvTPBMG3Al37fUE4krh+wrafC3YxHqiSXYtx604CXRU1RxoFqtGXogRYKc4FSUXqE4R1fagKUtclxaPAs3VZ79RB4Iiy0QHDAKBf+A5oQ1KKqgame3RAdBLobNGsQaCwx5Mlj+2dtJBB1JI0D4MCZn7g+mgSyEMAo0DQNXa2BSDYS99BQkkauv6esBaqiBeonabL7CxowBHWBcyQEZhV5wz6V21rcNjDFYDSyZ1yQZAEO5SVRTwJTBWIY4hsU6y+I8O0wIUr4GOYf5Tbs0A0PXMDgGABxWGVxtKTPXVZgHtBUpA0JQThrww4BI2fByEjOmZFFAbxNsuKNqerAsUU+ImEGYjGMcKYxgwaN3BFYJkGPxNPHgcsV35nSQJzNuLb6wLvnGCVp+e7Je7Bjb/gE1HHRdnzinVOAAAAAElFTkSuQmCC';

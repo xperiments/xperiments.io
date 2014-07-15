@@ -1,6 +1,7 @@
 {
     "title": "Typescript: Rethinking \"Strings\" Events",
     "date": "2014-7-7",
+    "image": "/images/238522209.jpg",
     "categories": [
         "Typescript"
     ]
